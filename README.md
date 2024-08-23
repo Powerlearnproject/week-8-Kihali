@@ -49,3 +49,8 @@ Select a Sustainable Development Goal (SDG) that resonates with you and develop 
 - Excel workbook with data analysis and dashboard
 - Integration documentation
 - Pitch deck presentation
+
+- 
+**Below I have attached a link to my files that contain Google sgeet file and Pitchdeck for this assignment**
+  https://docs.google.com/spreadsheets/d/1nEnnGrlUS_Y5sXWwAIe_spk6VPiCRzOZ7uceCoBn-XU/edit?usp=sharing
+  https://www.canva.com/design/DAGOqwvXeFY/iE2gMDLM9aNxfDRWNjPdoQ/edit?utm_content=DAGOqwvXeFY&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton
