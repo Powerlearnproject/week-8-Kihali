@@ -1,0 +1,122 @@
+##Step 1: Create the Database
+
+CREATE DATABASE SDG_HealthDatabase;
+USE SDG_HealthDatabase;
+
+##Step 2: Create the Tables
+
+CREATE TABLE HealthFacilities (
+    facility_id INT PRIMARY KEY,
+    name VARCHAR(100),
+    location VARCHAR(100),
+    capacity INT
+);
+
+CREATE TABLE ChildMortality (
+    record_id INT PRIMARY KEY,
+    location VARCHAR(100),
+    age INT,
+    gender VARCHAR(10),
+    cause_of_death VARCHAR(100)
+);
+
+CREATE TABLE Region (
+    region_id INT PRIMARY KEY,
+    name VARCHAR(100),
+    population INT,
+    GDP DECIMAL(15,2)
+);
+
+
+##Step 3: Populate the Tables with Sample Data
+ ##Region Table
+
+INSERT INTO Region (region_id, name, population, GDP) VALUES
+(1, 'Nairobi, Kenya', 4500000, 150000.00),
+(2, 'Mombasa, Kenya', 1200000, 60000.00),
+(3, 'Kisumu, Kenya', 1150000, 50000.00);
+
+## HealthFacilities Table
+
+INSERT INTO HealthFacilities (facility_id, name, location, capacity) VALUES
+(1, 'Kenyatta National Hospital', 'Nairobi, Kenya', 2000),
+(2, 'Mbagathi District Hospital', 'Nairobi, Kenya', 500),
+(3, 'Nairobi Women’s Hospital', 'Nairobi, Kenya', 300),
+(4, 'Pumwani Maternity Hospital', 'Nairobi, Kenya', 400),
+(5, 'Karen Hospital', 'Nairobi, Kenya', 250),
+
+(6, 'Coast General Hospital', 'Mombasa, Kenya', 800),
+(7, 'Mombasa Hospital', 'Mombasa, Kenya', 450),
+(8, 'Jocham Hospital', 'Mombasa, Kenya', 350),
+(9, 'Tudor District Hospital', 'Mombasa, Kenya', 200),
+(10, 'Aga Khan Hospital Mombasa', 'Mombasa, Kenya', 300),
+
+(11, 'Jaramogi Oginga Odinga Teaching & Referral Hospital', 'Kisumu, Kenya', 600),
+(12, 'Kisumu County Hospital', 'Kisumu, Kenya', 400),
+(13, 'Ahero Sub-County Hospital', 'Kisumu, Kenya', 250),
+(14, 'Russia Hospital', 'Kisumu, Kenya', 300),
+(15, 'Kombewa Sub-County Hospital', 'Kisumu, Kenya', 200);
+
+
+## ChildMortality Table
+
+INSERT INTO ChildMortality (record_id, location, age, gender, cause_of_death) VALUES
+(1, 'Nairobi, Kenya', 1, 'Female', 'Malnutrition'),
+(2, 'Nairobi, Kenya', 2, 'Male', 'Malaria'),
+(3, 'Nairobi, Kenya', 1, 'Female', 'Respiratory Infection'),
+(4, 'Nairobi, Kenya', 3, 'Male', 'Diarrheal Diseases'),
+(5, 'Nairobi, Kenya', 2, 'Female', 'Malnutrition'),
+
+(6, 'Mombasa, Kenya', 2, 'Male', 'Malaria'),
+(7, 'Mombasa, Kenya', 1, 'Female', 'Birth Complications'),
+(8, 'Mombasa, Kenya', 3, 'Male', 'Pneumonia'),
+(9, 'Mombasa, Kenya', 4, 'Female', 'Infection'),
+(10, 'Mombasa, Kenya', 2, 'Male', 'Malnutrition'),
+
+(11, 'Kisumu, Kenya', 1, 'Female', 'Malnutrition'),
+(12, 'Kisumu, Kenya', 3, 'Male', 'Malaria'),
+(13, 'Kisumu, Kenya', 2, 'Female', 'Respiratory Infection'),
+(14, 'Kisumu, Kenya', 4, 'Male', 'Diarrheal Diseases'),
+(15, 'Kisumu, Kenya', 2, 'Female', 'Malaria');
+
+##merge the data from the HealthFacilities, ChildMortality, and Region tables into one consolidated table called SDG_Mortality_Rates_In_Kenya, we can create a new table that combines relevant columns from all three tables. The merged table will include information about the health facilities, child mortality records, and regional data.
+##Create the SDG_Mortality_Rates_In_Kenya Table
+
+CREATE TABLE SDG_Mortality_Rates_In_Kenya (
+    record_id INT PRIMARY KEY,
+    facility_name VARCHAR(100),
+    facility_location VARCHAR(100),
+    facility_capacity INT,
+    child_age INT,
+    child_gender VARCHAR(10),
+    cause_of_death VARCHAR(100),
+    region_name VARCHAR(100),
+    population INT,
+    GDP DECIMAL(15,2)
+);
+
+## Insert Data into SDG_Mortality_Rates_In_Kenya
+
+INSERT INTO SDG_Mortality_Rates_In_Kenya (record_id, facility_name, facility_location, facility_capacity, child_age, child_gender, cause_of_death, region_name, population, GDP)
+SELECT 
+    cm.record_id, 
+    hf.name AS facility_name, 
+    hf.location AS facility_location, 
+    hf.capacity AS facility_capacity, 
+    cm.age AS child_age, 
+    cm.gender AS child_gender, 
+    cm.cause_of_death, 
+    r.name AS region_name, 
+    r.population, 
+    r.GDP
+FROM 
+    ChildMortality cm
+JOIN 
+    HealthFacilities hf 
+ON 
+    cm.location = hf.location
+JOIN 
+    Region r 
+ON 
+    hf.location = r.name;
+
